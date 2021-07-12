@@ -26,6 +26,4 @@ public class Task {
     public String toString() {
         return id + "\n" + description + "\n" + date;
     }
-
-
 }

@@ -1,15 +1,13 @@
+
 package com.example.demodatabase;
-
-import android.content.ContentValues;
-import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
-
-import androidx.annotation.Nullable;
-
-import java.util.ArrayList;
+ import android.content.ContentValues;
+ import android.content.Context;
+ import android.database.Cursor;
+ import android.database.sqlite.SQLiteDatabase;
+ import android.database.sqlite.SQLiteOpenHelper;
+ import android.util.Log;
+ import androidx.annotation.Nullable;
+ import java.util.ArrayList;
 
 public class DBHelper extends SQLiteOpenHelper {
 
@@ -74,7 +72,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 + " FROM " + TABLE_TASK;
 
         // Get the instance of database to read
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase db = getReadableDatabase();
 
         // Run the SQL query and get back the Cursor object
         Cursor cursor = db.rawQuery(selectQuery, null);
@@ -96,5 +94,29 @@ public class DBHelper extends SQLiteOpenHelper {
         db.close();
 
         return tasks;
+    }
+
+    public ArrayList<Task> getTasks() {
+        ArrayList<Task> tasks = new ArrayList<>();
+        String selectQuery = "SELECT " + COLUMN_ID + ","
+                + COLUMN_DESCRIPTION + "," + COLUMN_DATE
+                + "FROM " + TABLE_TASK;
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                int id = cursor.getInt(0);
+                String description = cursor.getString(1);
+                String date = cursor.getString(2);
+                Task obj = new Task(id, description, date);
+                tasks.add(obj);
+
+            } while (cursor.moveToNext());
+            }
+            cursor.close();
+            db.close();
+            return tasks;
+        }
     }
 }
